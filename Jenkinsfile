@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = "rest-api-with-docker"
         CONTAINER_NAME = "rest-api-with-docker-container"
-        HOST_PORT = "8080"
+        HOST_PORT = "8081"
         CONTAINER_PORT = "8080"
     }
 
