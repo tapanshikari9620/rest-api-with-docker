@@ -40,18 +40,19 @@ pipeline {
                 }
             }
         }
+stage('Tag Image') {
+    steps {
+        bat 'docker tag %IMAGE_NAME% %DOCKER_USER%/%IMAGE_NAME%:%BUILD_NUMBER%'
+        bat 'docker tag %IMAGE_NAME% %DOCKER_USER%/%IMAGE_NAME%:latest'
+    }
+}
 
-        stage('Tag Image') {
-            steps {
-                bat 'docker tag %IMAGE_NAME% %DOCKER_USER%/%IMAGE_NAME%:1.0'
-            }
-        }
-
-        stage('Push Image') {
-            steps {
-                bat 'docker push %DOCKER_USER%/%IMAGE_NAME%:1.0'
-            }
-        }
+stage('Push Image') {
+    steps {
+        bat 'docker push %DOCKER_USER%/%IMAGE_NAME%:%BUILD_NUMBER%'
+        bat 'docker push %DOCKER_USER%/%IMAGE_NAME%:latest'
+    }
+}
 
         stage('Cleanup Old Containers') {
             steps {
