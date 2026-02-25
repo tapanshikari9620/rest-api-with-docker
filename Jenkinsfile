@@ -26,14 +26,13 @@ pipeline {
             }
         }
 
-        stage('Stop Old Container') {
-            steps {
-                bat '''
-                docker stop %CONTAINER_NAME% || exit 0
-                docker rm %CONTAINER_NAME% || exit 0
-                '''
-            }
-        }
+       stage('Stop Old Container') {
+    steps {
+        bat '''
+        docker rm -f rest-api-with-docker-container || exit 0
+        '''
+    }
+}
 
         stage('Run Container') {
             steps {
