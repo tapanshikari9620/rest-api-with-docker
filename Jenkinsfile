@@ -4,6 +4,8 @@ pipeline {
     environment {
         IMAGE_NAME = "rest-api-with-docker"
         CONTAINER_NAME = "rest-api-with-docker-container"
+        HOST_PORT = "8080"
+        CONTAINER_PORT = "8080"
     }
 
     stages {
@@ -26,24 +28,25 @@ pipeline {
             }
         }
 
-       stage('Stop Old Container') {
-    steps {
-        bat '''
-        docker rm -f rest-api-with-docker-container || exit 0
-        '''
-    }
-}
+        stage('Cleanup Old Containers') {
+            steps {
+                bat '''
+                FOR /f "tokens=*" %%i IN ('docker ps -q --filter "publish=%HOST_PORT%"') DO docker rm -f %%i
+                docker rm -f %CONTAINER_NAME% 2>NUL
+                '''
+            }
+        }
 
         stage('Run Container') {
             steps {
-                bat 'docker run -d -p 8080:8080 --name %CONTAINER_NAME% %IMAGE_NAME%'
+                bat 'docker run -d -p %HOST_PORT%:%CONTAINER_PORT% --name %CONTAINER_NAME% %IMAGE_NAME%'
             }
         }
     }
 
     post {
         success {
-            echo 'Application deployed successfully on Docker'
+            echo "Application deployed at http://localhost:%HOST_PORT%"
         }
     }
 }
