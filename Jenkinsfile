@@ -64,10 +64,12 @@ stage('Push Image') {
         }
 
         stage('Run Container') {
-            steps {
-                bat 'docker run -d -p %HOST_PORT%:%CONTAINER_PORT% --name %CONTAINER_NAME% %IMAGE_NAME%'
-            }
-        }
+    steps {
+        bat 'docker rm -f %CONTAINER_NAME% 2>NUL'
+        bat 'docker pull %DOCKER_USER%/%IMAGE_NAME%:%BUILD_NUMBER%'
+        bat 'docker run -d -p %HOST_PORT%:%CONTAINER_PORT% --name %CONTAINER_NAME% %DOCKER_USER%/%IMAGE_NAME%:%BUILD_NUMBER%'
+    }
+}
     }
 
     post {
