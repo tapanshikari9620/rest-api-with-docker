@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "rest-api-with-docker"
+        DOCKER_USER = "tapanaws155"
         CONTAINER_NAME = "rest-api-with-docker-container"
         HOST_PORT = "8081"
         CONTAINER_PORT = "8080"
@@ -25,6 +26,30 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 bat 'docker build -t %IMAGE_NAME% .'
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKERHUB_USER',
+                    passwordVariable: 'DOCKERHUB_PASS'
+                )]) {
+                    bat 'docker login -u %DOCKERHUB_USER% -p %DOCKERHUB_PASS%'
+                }
+            }
+        }
+
+        stage('Tag Image') {
+            steps {
+                bat 'docker tag %IMAGE_NAME% %DOCKER_USER%/%IMAGE_NAME%:1.0'
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                bat 'docker push %DOCKER_USER%/%IMAGE_NAME%:1.0'
             }
         }
 
