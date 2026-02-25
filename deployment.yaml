@@ -15,5 +15,6 @@ spec:
       containers:
         - name: rest-api
           image: tapanaws155/rest-api-with-docker:2.0
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
