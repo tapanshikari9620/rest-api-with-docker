@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rest-api-pod
+  labels:
+    app: rest-api
+spec:
+  containers:
+    - name: rest-api
+      image: tapanaws155/rest-api-with-docker:1.0
+      ports:
+        - containerPort: 8080
