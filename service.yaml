@@ -3,10 +3,9 @@ kind: Service
 metadata:
   name: rest-api-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: rest-api
   ports:
     - port: 80
       targetPort: 8080
-      nodePort: 30007
