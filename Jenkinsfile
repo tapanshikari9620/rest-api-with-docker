@@ -16,7 +16,11 @@ pipeline {
                 checkout scm
             }
         }
-
+        stage('Maven Build') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
         stage('Build JAR') {
             steps {
                 bat 'mvn clean package'
