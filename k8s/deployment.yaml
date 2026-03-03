@@ -13,8 +13,7 @@ spec:
         app: rest-api
     spec:
       containers:
-        - name: rest-api
-          image: 060704331174.dkr.ecr.ap-south-1.amazonaws.com/rest-api:latest
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 8080
+      - name: rest-api-container
+        image: tapanaws155/rest-api-with-docker-eks:latest
+        ports:
+        - containerPort: 8080
