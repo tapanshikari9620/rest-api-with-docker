@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "rest-api-with-docker"
+        IMAGE_NAME = "rest-api-with-docker-eks"
         DOCKER_USER = "tapanaws155"
         CONTAINER_NAME = "rest-api-with-docker-container"
         HOST_PORT = "8081"
