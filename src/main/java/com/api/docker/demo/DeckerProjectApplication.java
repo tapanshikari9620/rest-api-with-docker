@@ -18,6 +18,12 @@ public class DeckerProjectApplication {
         return "Hello from Spring Boot Docker Demo 🚀";
     }
 
+	 @GetMapping("/")
+    public String home() {
+        return "Hello from Spring Boot Docker Demo fffff🚀";
+    }
+
+
     @GetMapping("/devops")
     public String devops() {
         return "Jenkins + Docker CI/CD working ✅";
