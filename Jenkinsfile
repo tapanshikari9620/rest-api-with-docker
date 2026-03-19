@@ -2,11 +2,11 @@ pipeline {
     agent any
 
     environment {
-        AWS_ACCOUNT_ID = "060704331174"
-        AWS_REGION = "ap-south-1"
-        ECR_REPO = "first-rest-api-deployment"
-        IMAGE_TAG = "latest"
-        CLUSTER_NAME = "my-cluster"
+        AWS_ACCOUNT_ID = '060704331174'
+        AWS_REGION = 'ap-south-1'
+        ECR_REPO = 'first-rest-api-deployment'
+        IMAGE_TAG = 'latest'
+        CLUSTER_NAME = 'my-cluster'
     }
 
      stages {
