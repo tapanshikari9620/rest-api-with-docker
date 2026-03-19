@@ -9,26 +9,31 @@ pipeline {
         CLUSTER_NAME = "my-cluster"
     }
 
-    stages {
+     stages {
 
-        stage('Clone Code') {
+        stage('Checkout Code') {
             steps {
                 git branch: 'develop', url: 'https://github.com/tapanshikari9620/rest-api-with-docker.git'
             }
         }
 
+        stage('Build JAR') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
-                sh '''
-                docker build -t $ECR_REPO:$IMAGE_TAG .
-                '''
+                sh 'docker build -t first-rest-api:latest .'
             }
         }
 
         stage('Login to ECR') {
             steps {
                 sh '''
-                aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+                aws ecr get-login-password --region $AWS_REGION | \
+                docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
                 '''
             }
         }
@@ -36,7 +41,8 @@ pipeline {
         stage('Tag Image') {
             steps {
                 sh '''
-                docker tag $ECR_REPO:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
+                docker tag first-rest-api:latest \
+                $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
                 '''
             }
         }
@@ -44,7 +50,7 @@ pipeline {
         stage('Push to ECR') {
             steps {
                 sh '''
-                docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
+                docker push $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
                 '''
             }
         }
@@ -52,9 +58,8 @@ pipeline {
         stage('Deploy to EKS') {
             steps {
                 sh '''
-                aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
-
-                kubectl set image deployment/rest-api-deployment rest-api-container=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
+                aws eks --region $AWS_REGION update-kubeconfig --name your-cluster-name
+                kubectl apply -f k8s/deployment.yaml
                 '''
             }
         }
