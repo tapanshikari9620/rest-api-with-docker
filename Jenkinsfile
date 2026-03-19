@@ -56,12 +56,12 @@ pipeline {
         }
 
         stage('Deploy to EKS') {
-            steps {
-                sh '''
-                aws eks --region $AWS_REGION update-kubeconfig --name your-cluster-name
-                kubectl apply -f k8s/deployment.yaml
-                '''
-            }
-        }
+    steps {
+        sh '''
+        aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
+        kubectl apply -f k8s/deployment.yaml
+        '''
+    }
+}
     }
 }
