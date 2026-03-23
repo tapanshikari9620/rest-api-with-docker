@@ -22,4 +22,8 @@ public class DeckerProjectApplication {
     public String devops() {
         return "Jenkins + Docker CI/CD working ✅";
     }
+    @GetMapping("/tapan")
+    public String devops1() {
+        return "Jenkins + Docker CI/CD working complete project ✅";
+    }
 }
